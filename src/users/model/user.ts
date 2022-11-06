@@ -22,13 +22,13 @@ const UserSchema: Schema = new mongoose.Schema<IUserModel>({
   },
 });
 
-const User: Model<IUserModel> = mongoose.model<IUserModel>("user", UserSchema);
 
 
-UserSchema.pre("save", async function (this: IUserModel, next) {
+UserSchema.pre("save", async function (next) {
   this.password = await bcryptjs.hash(this.password, 12);
   next();
 });
 
+const User: Model<IUserModel> = mongoose.model<IUserModel>("user", UserSchema);
 
 export default User;

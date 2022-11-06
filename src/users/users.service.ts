@@ -27,6 +27,7 @@ class UsersService {
           role: "USER",
         });
         const saveUser = await newUser.save();
+        // console.log(saveUser);
         token = await AuthToken.generateToken({
           email: saveUser.username,
           _id: saveUser._id,
