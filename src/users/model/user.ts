@@ -1,13 +1,13 @@
-import mongoose, { Model, Schema } from 'mongoose';
+import mongoose, { Model, Schema, Document } from 'mongoose';
 import bcryptjs from "bcryptjs";
 
-export interface UserModel {
+export interface IUserModel extends Document {
   username: string;
   password: string;
   role: string;
 }
 
-const UserSchema: Schema = new mongoose.Schema({
+const UserSchema: Schema = new mongoose.Schema<IUserModel>({
   username: {
     type: String,
     unique: true,
@@ -22,12 +22,13 @@ const UserSchema: Schema = new mongoose.Schema({
   },
 });
 
-const User: Model<UserModel> = mongoose.model<UserModel>("user", UserSchema);
+const User: Model<IUserModel> = mongoose.model<IUserModel>("user", UserSchema);
 
 
-UserSchema.pre("save", async function (this: UserModel, next) {
+UserSchema.pre("save", async function (this: IUserModel, next) {
   this.password = await bcryptjs.hash(this.password, 12);
   next();
 });
 
-export default UserModel;
+
+export default User;

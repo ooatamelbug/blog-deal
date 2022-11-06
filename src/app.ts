@@ -1,3 +1,4 @@
+import { appRouter } from './shared/routes';
 import express, { Application } from 'express';
 import cors from "cors";
 import Database from './database/config';
@@ -19,6 +20,9 @@ app.use(cors({
 
 // connect to db 
 Database.getInstance();
+
+// app routes
+appRouter(app);
 
 // export app for use
 export default app;
