@@ -3,12 +3,11 @@ import { PostInputDTO } from "./dto/posts.dto";
 import { validate } from "class-validator";
 import { Request, Response, NextFunction } from "express";
 import PostsService from "./posts.service";
-import { JwtPayload } from "jsonwebtoken";
 
 class PostsController {
   private postsService: PostsService;
-  constructor(injectUsersService: PostsService) {
-    this.postsService = injectUsersService;
+  constructor(injectService: PostsService) {
+    this.postsService = injectService;
   }
 
   public async createPost(req: CustomRequest, res: Response, next: NextFunction) {

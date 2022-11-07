@@ -5,8 +5,8 @@ import PostsController from "./posts.controller";
 class PostsRoutes {
   private readonly postsController: PostsController;
   public router: Router;
-  constructor(injectUsersController: PostsController) {
-    this.postsController = injectUsersController;
+  constructor(injectController: PostsController) {
+    this.postsController = injectController;
     this.router = Router();
   }
 
