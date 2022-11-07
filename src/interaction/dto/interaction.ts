@@ -1,11 +1,13 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 export class InteractionInputDTO {
   @IsNotEmpty()
   @IsString()
   type: string;
 
+  @IsOptional()
   post?: string;
+  @IsOptional()
   comment?: string;
 
   createdby: string;

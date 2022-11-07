@@ -44,8 +44,8 @@ class InteractionService {
           response.data = [interaction];
         }
       } else {
-        const post = await this.commentModel.findOne({ _id: inputDTO.comment });
-        if (!post) {
+        const comment = await this.commentModel.findOne({ _id: inputDTO.comment });
+        if (!comment) {
           statusCode = 404;
           response.message = " error in get comment";
           response.errors = ["not found comment"];

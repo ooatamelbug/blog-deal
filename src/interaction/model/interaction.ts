@@ -16,12 +16,10 @@ const InteractionSchema: Schema = new mongoose.Schema<IInteractionModel>({
   post: {
     type: mongoose.Types.ObjectId,
     ref: "posts",
-    required: true,
   },
   comment: {
     type: mongoose.Types.ObjectId,
     ref: "comments",
-    required: true,
   },
   createdby: {
     type: mongoose.Types.ObjectId,
