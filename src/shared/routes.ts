@@ -11,9 +11,14 @@ import CommentsRoutes from "../comment/comments.routes";
 import CommentsController from "../comment/comments.controller";
 import CommentsService from "../comment/comments.service";
 
+import InteractionsRoutes from "../interaction/interaction.routes";
+import InteractionsController from "../interaction/interaction.controller";
+import InteractionsService from "../interaction/interaction.service";
+
 import User from "../users/model/user";
 import Post from "../post/model/posts";
 import Comment from "../comment/model/comments";
+import Interaction from "../interaction/model/interaction";
 
 export const appRouter = (app: Application) => {
   // user router
@@ -29,9 +34,15 @@ export const appRouter = (app: Application) => {
   app.use("/posts", routesPost.getRouter());
   
 
-  // post router
+  // Comment router
   const serciceComment = new CommentsService(Comment);
   const controllerComment = new CommentsController(serciceComment);
   const routesComment = new CommentsRoutes(controllerComment);
   app.use("/comments", routesComment.getRouter());
+
+  // interaction router
+  const serciceInteraction = new InteractionsService(Interaction);
+  const controllerInteraction = new InteractionsController(serciceInteraction);
+  const routesInteraction = new InteractionsRoutes(controllerInteraction);
+  app.use("/interactions", routesInteraction.getRouter());
 };
