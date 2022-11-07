@@ -1,10 +1,10 @@
-import { Response, ReturnValue } from './../shared/response';
+import { Response, ReturnValue } from "./../shared/response";
 import bcryptjs from "bcryptjs";
 import { AuthDTO } from "./dto/auth.dto";
 import User, { IUserModel } from "./model/user";
 import { Model } from "mongoose";
 import AuthToken from "../shared/authtoken";
-
+import { validate } from "class-validator";
 
 class UsersService {
   private readonly userModel: Model<IUserModel>;
@@ -19,7 +19,9 @@ class UsersService {
       const userData = await this.userModel.findOne({
         username: loginDTO.username,
       });
+      
       let token: string;
+      
       if (!userData) {
         const newUser = await this.userModel.create({
           username: loginDTO.username,
@@ -27,7 +29,6 @@ class UsersService {
           role: "USER",
         });
         const saveUser = await newUser.save();
-        // console.log(saveUser);
         token = await AuthToken.generateToken({
           email: saveUser.username,
           _id: saveUser._id,
