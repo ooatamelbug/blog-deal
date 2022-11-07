@@ -14,7 +14,7 @@ describe("test login", () => {
     mongoose.connect("mongodb://localhost:27017/blogdeal");
     dotenv.config({ path: "./.env" });
 
-    User.remove({}, (err) => {
+    User.remove({ username: "moh@email.com" }, (err) => {
       done();
     });
   });
@@ -37,28 +37,28 @@ describe("test login", () => {
         .request(app)
         .post("/users/login")
         .set("content-type", "application/json")
-        .send({username: "", password: "" })
+        .send({ username: "", password: "" })
         .end((err, res) => {
-            res.should.have.status(400);
-            res.body.should.have.property("message");
-            res.body.should.have.property("errors");
-            res.body.errors.should.to.be.a("array");
-            done();
-        })
+          res.should.have.status(400);
+          res.body.should.have.property("message");
+          res.body.should.have.property("errors");
+          res.body.errors.should.to.be.a("array");
+          done();
+        });
     });
     it("should exception username validation data", (done) => {
-        chai
-          .request(app)
-          .post("/users/login")
-          .set("content-type", "application/json")
-          .send({username: "emailemail123", password: "ksjdk" })
-          .end((err, res) => {
-              res.should.have.status(400);
-              res.body.should.have.property("message");
-              res.body.should.have.property("errors");
-              res.body.errors.should.to.be.a("array");
-              done();
-          })
-      });
+      chai
+        .request(app)
+        .post("/users/login")
+        .set("content-type", "application/json")
+        .send({ username: "emailemail123", password: "ksjdk" })
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("message");
+          res.body.should.have.property("errors");
+          res.body.errors.should.to.be.a("array");
+          done();
+        });
+    });
   });
 });

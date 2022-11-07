@@ -35,13 +35,13 @@ export const appRouter = (app: Application) => {
   
 
   // Comment router
-  const serciceComment = new CommentsService(Comment);
+  const serciceComment = new CommentsService(Comment, Post);
   const controllerComment = new CommentsController(serciceComment);
   const routesComment = new CommentsRoutes(controllerComment);
   app.use("/comments", routesComment.getRouter());
 
   // interaction router
-  const serciceInteraction = new InteractionsService(Interaction);
+  const serciceInteraction = new InteractionsService(Interaction, Comment, Post);
   const controllerInteraction = new InteractionsController(serciceInteraction);
   const routesInteraction = new InteractionsRoutes(controllerInteraction);
   app.use("/interactions", routesInteraction.getRouter());
