@@ -1,6 +1,6 @@
+import { CustomRequestJwtPayload, CustomRequest } from './../shared/request';
 import { NextFunction, Response } from "express";
 import jwt from "jsonwebtoken";
-import CustomRequest from "../shared/request";
 
 export const Auth = async (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
@@ -11,7 +11,7 @@ export const Auth = async (req: CustomRequest, res: Response, next: NextFunction
         errors: ["authorization error"],
       });
     } else {
-      const isValideToken = await jwt.verify(
+      const isValideToken = <CustomRequestJwtPayload>await jwt.verify(
         authKey,
         process.env.JWT_SECETE as string
       );
@@ -21,7 +21,7 @@ export const Auth = async (req: CustomRequest, res: Response, next: NextFunction
           errors: ["token expired"],
         });
       } else {
-        req.user = isValideToken;
+        req.user = isValideToken?._id;
         next();
       }
     }

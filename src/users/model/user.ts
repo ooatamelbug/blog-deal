@@ -10,14 +10,17 @@ export interface IUserModel extends Document {
 const UserSchema: Schema = new mongoose.Schema<IUserModel>({
   username: {
     type: String,
+    required: true,
     unique: true,
     sparse: true,
   },
   password: {
     type: String,
+    required: true,
   },
   role: {
     type: String,
+    required: true,
     enum: ["USER", "ADMIN"],
   },
 });
