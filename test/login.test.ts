@@ -19,7 +19,7 @@ describe("test login", () => {
     });
   });
   // login page
-  describe("Get /login", () => {
+  describe("POST /login", () => {
     it("should return token", (done) => {
       chai
         .request(app)
