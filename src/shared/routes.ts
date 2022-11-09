@@ -1,7 +1,12 @@
 import { Application } from "express";
-import UsersRoutes from "../users/users.routes";
-import UsersController from "../users/users.controller";
-import UsersService from "../users/users.service";
+import UsersRoutes from "../users/user/users.routes";
+import UsersController from "../users/user/users.controller";
+import UsersService from "../users/user/users.service";
+
+import AdminRoutes from "../users/admin/admin.routes";
+import AdminController from "../users/admin/admin.controller";
+import AdminService from "../users/admin/admin.service";
+
 
 import PostsRoutes from "../post/posts.routes";
 import PostsController from "../post/posts.controller";
@@ -45,4 +50,12 @@ export const appRouter = (app: Application) => {
   const controllerInteraction = new InteractionsController(serciceInteraction);
   const routesInteraction = new InteractionsRoutes(controllerInteraction);
   app.use("/interactions", routesInteraction.getRouter());
+
+  // ADMIN router
+  const serciceAdmin = new AdminService(sercicePost, serciceInteraction, serciceComment);
+  const controllerAdmin = new AdminController(serciceUser, serciceAdmin);
+  const routesAdmin = new AdminRoutes(controllerAdmin);
+  app.use("/admin", routesAdmin.getRouter());
+
+
 };

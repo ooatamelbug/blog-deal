@@ -1,10 +1,9 @@
-import { Response, ReturnValue } from "./../shared/response";
+import { Response, ReturnValue } from "../../shared/response";
 import bcrypt from "bcrypt";
-import { AuthDTO } from "./dto/auth.dto";
-import User, { IUserModel } from "./model/user";
+import { AuthDTO } from "../dto/auth.dto";
+import User, { IUserModel } from "../model/user";
 import { Model } from "mongoose";
-import AuthToken from "../shared/authtoken";
-import { validate } from "class-validator";
+import AuthToken from "../../shared/authtoken";
 
 class UsersService {
   private readonly userModel: Model<IUserModel>;

@@ -43,9 +43,8 @@ class PostsService {
       if (
         postsTotal < skip ||
         Math.ceil(postsTotal / (Number(showedParam.limit) || 10)) <
-          Number(showedParam.pagenate)
-          ||
-          Number(showedParam.pagenate) <= 0
+          Number(showedParam.pagenate) ||
+        Number(showedParam.pagenate) <= 0
       ) {
         statusCode = 404;
         response.message = "out of the range";
@@ -102,6 +101,28 @@ class PostsService {
           hasPrevPage: Number(showedParam.pagenate) >= 2,
         };
       }
+    } catch (error) {
+      statusCode = 500;
+      response.message = error.message;
+    }
+    return { statusCode, response };
+  }
+
+  public async getPostsStatic(): Promise<ReturnValue> {
+    let statusCode: number = 200;
+    let response: Response = {};
+    try {
+      const postCount = await this.postModel.aggregate([
+        {
+          $group: {
+            _id: "$status",
+            count: {
+              $sum: 1,
+            },
+          },
+        },
+      ]);
+      response.data = { type: "posts", TYPE: postCount };
     } catch (error) {
       statusCode = 500;
       response.message = error.message;

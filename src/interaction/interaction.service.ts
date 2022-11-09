@@ -72,6 +72,54 @@ class InteractionService {
     }
     return { statusCode, response };
   }
+
+  public async getInteractionsStatic(): Promise<ReturnValue> {
+    let statusCode: number = 200;
+    let response: Response = {};
+    try {
+      const interactionPostCount = await this.interactionModel.aggregate([
+        {
+          $match: {
+            post: { $ne: null },
+          },
+        },
+        {
+          $group: {
+            _id: "null",
+            count: {
+              $sum: 1,
+            },
+          },
+        },
+      ]);
+      const interactionCommentCount = await this.interactionModel.aggregate([
+        {
+          $match: {
+            comment: { $ne: null },
+          },
+        },
+        {
+          $group: {
+            _id: "null",
+            count: {
+              $sum: 1,
+            },
+          },
+        },
+      ]);
+
+      response.data = {
+        type: "interaction",
+        comment: interactionCommentCount,
+        post: interactionPostCount,
+      };
+    } catch (error) {
+      statusCode = 500;
+      response.message = error.message;
+    }
+    return { statusCode, response };
+  }
+  
 }
 
 export default InteractionService;

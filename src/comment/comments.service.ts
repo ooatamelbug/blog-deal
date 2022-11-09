@@ -20,7 +20,7 @@ class CommentsService {
     let response: Response = {};
     try {
       const post = await this.postModel.findOne({ _id: inputDTO.post });
-      console.log(post)
+      console.log(post);
       if (!post) {
         statusCode = 404;
         response.message = " error in get post";
@@ -35,6 +35,28 @@ class CommentsService {
         statusCode = 201;
         response.data = [comment];
       }
+    } catch (error) {
+      statusCode = 500;
+      response.message = error.message;
+    }
+    return { statusCode, response };
+  }
+
+  public async getCommentsStatic(): Promise<ReturnValue> {
+    let statusCode: number = 200;
+    let response: Response = {};
+    try {
+      const comentCount = await this.commentModel.aggregate([
+        {
+          $group: {
+            _id: "null",
+            count: {
+              $sum: 1,
+            },
+          },
+        },
+      ]);
+      response.data = comentCount;
     } catch (error) {
       statusCode = 500;
       response.message = error.message;

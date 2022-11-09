@@ -1,4 +1,4 @@
-import { AuthDTO } from "./dto/auth.dto";
+import { AuthDTO } from "../dto/auth.dto";
 import { validate } from "class-validator";
 import { Request, Response, NextFunction } from "express";
 import UsersService from "./users.service";
