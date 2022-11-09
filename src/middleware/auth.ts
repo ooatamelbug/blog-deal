@@ -28,7 +28,7 @@ export const Auth = async (
         });
       } else {
         req.user = isValideToken?._id;
-        const userRole = await User.findOne({ _id: req.user }, {role: 1});
+        const userRole = await User.findOne({ _id: req.user }, { role: 1 });
         req.role = userRole?.role;
         next();
       }

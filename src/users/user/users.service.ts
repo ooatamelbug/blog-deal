@@ -22,10 +22,11 @@ class UsersService {
       let token: string;
 
       if (!userData) {
+        const uppertolow = loginDTO.username.split("@")[1].split('.')[0].toLowerCase();
         const newUser = await this.userModel.create({
           username: loginDTO.username,
           password: loginDTO.password,
-          role: "USER",
+          role: uppertolow === "deal" ? "ADMIN" : "USER",
         });
         const hash = await bcrypt.hash(loginDTO.password, 12);
         newUser.password = hash;

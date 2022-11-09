@@ -1,4 +1,7 @@
-import { Router } from "express";
+import { CustomRequest } from "./../../shared/request";
+import { IsAdmin } from "./../../middleware/admin";
+import { Response, Router, NextFunction } from "express";
+import { Auth } from "../../middleware/auth";
 import AdminController from "./admin.controller";
 
 class AdminRoutes {
@@ -11,8 +14,11 @@ class AdminRoutes {
 
   getRouter() {
     // login router
-    this.router.get("/statistics", (req, res, next) =>
-      this.adminController.statistics(req, res, next)
+    this.router.get(
+      "/statistics",
+      [Auth, IsAdmin],
+      (req: CustomRequest, res: Response, next: NextFunction) =>
+        this.adminController.statistics(req, res, next)
     );
     return this.router;
   }

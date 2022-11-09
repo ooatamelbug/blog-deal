@@ -19,7 +19,6 @@ describe("test comments", () => {
   // login page
   describe("POST /comments", () => {
     it("should return error 401", (done) => {
-      console.log("here 2");
       chai
         .request(app)
         .post("/comments")
