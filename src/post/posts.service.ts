@@ -40,7 +40,13 @@ class PostsService {
         Number(showedParam.pagenate) === 1
           ? 0
           : (Number(showedParam.pagenate) - 1) * 10;
-      if (postsTotal < skip) {
+      if (
+        postsTotal < skip ||
+        Math.ceil(postsTotal / (Number(showedParam.limit) || 10)) <
+          Number(showedParam.pagenate)
+          ||
+          Number(showedParam.pagenate) <= 0
+      ) {
         statusCode = 404;
         response.message = "out of the range";
       } else {
@@ -85,12 +91,7 @@ class PostsService {
           .sort({ createdAt: -1 })
           .limit(Number(showedParam.limit) || 10)
           .skip(skip);
-        // .find(filter)
-        // .populate("users")
-        // .sort({ createdAt: -1 })
-        // .limit(Number(showedParam.limit) || 10)
-        // .skip(skip);
-        statusCode = 201;
+        statusCode = 200;
         response.data = {
           data: posts,
           total: postsTotal,

@@ -15,7 +15,8 @@ describe("test interaction", () => {
     done();
   });
   describe("POST /interactions", () => {
-    const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vaDBAZ21haWwuY29tIiwiX2lkIjoiNjM2OTA1ZTI3NjRhYWM1OWYwNTEyZjIxIiwiaWF0IjoxNjY3ODI3MzE0LCJleHAiOjE2Njc5MTM3MTR9.EJSJ8x0Z9ClOBKBTCKribADwAghl25SeZFT178NIfEk`;
+    const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vaDBAZ21haWwuY29tIiwiX2lkIjoiNjM2OTA1ZTI3NjRhYWM1OWYwNTEyZjIxIiwiaWF0IjoxNjY3OTc4NDk3LCJleHAiOjE2NjgwNjQ4OTd9.PSJvZTi0lt92r31488I4ZzHCdBhoIiCN0iIpJ5DjXMc";
     it("should should return error 401", (done) => {
       chai
         .request(app)

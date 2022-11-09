@@ -9,6 +9,8 @@ chai.should();
 chai.use(chaiHttpRequest);
 
 describe("test comments", () => {
+  const token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vaDBAZ21haWwuY29tIiwiX2lkIjoiNjM2OTA1ZTI3NjRhYWM1OWYwNTEyZjIxIiwiaWF0IjoxNjY3OTc4NDk3LCJleHAiOjE2NjgwNjQ4OTd9.PSJvZTi0lt92r31488I4ZzHCdBhoIiCN0iIpJ5DjXMc";
   beforeEach((done) => {
     mongoose.connect("mongodb://localhost:27017/blogdeal");
     dotenv.config({ path: "./.env" });
@@ -32,7 +34,6 @@ describe("test comments", () => {
         });
     });
     it("should return error 400 validation", (done) => {
-      const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vaDBAZ21haWwuY29tIiwiX2lkIjoiNjM2OTA1ZTI3NjRhYWM1OWYwNTEyZjIxIiwiaWF0IjoxNjY3ODI3MzE0LCJleHAiOjE2Njc5MTM3MTR9.EJSJ8x0Z9ClOBKBTCKribADwAghl25SeZFT178NIfEk`;
       chai
         .request(app)
         .post("/comments")
@@ -47,8 +48,6 @@ describe("test comments", () => {
         });
     });
     it("should return error not id", (done) => {
-      const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vaDBAZ21haWwuY29tIiwiX2lkIjoiNjM2OTA1ZTI3NjRhYWM1OWYwNTEyZjIxIiwiaWF0IjoxNjY3ODI3MzE0LCJleHAiOjE2Njc5MTM3MTR9.EJSJ8x0Z9ClOBKBTCKribADwAghl25SeZFT178NIfEk`;
-
       chai
         .request(app)
         .post("/comments")
@@ -61,24 +60,20 @@ describe("test comments", () => {
         });
     });
     it("should return error not found", (done) => {
-        const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vaDBAZ21haWwuY29tIiwiX2lkIjoiNjM2OTA1ZTI3NjRhYWM1OWYwNTEyZjIxIiwiaWF0IjoxNjY3ODI3MzE0LCJleHAiOjE2Njc5MTM3MTR9.EJSJ8x0Z9ClOBKBTCKribADwAghl25SeZFT178NIfEk`;
-  
-        chai
-          .request(app)
-          .post("/comments")
-          .set("Authorization", `Bearer ${token}`)
-          .send({ post: "6368fe9ce371a6c75fae3b6e", body: "body" })
-          .end((err, res) => {
-            res.should.have.status(404);
-            res.body.should.have.property("message");
-            res.body.should.have.property("errors");
-            res.body.errors.should.to.be.a("array");
-            done();
-          });
-      });
+      chai
+        .request(app)
+        .post("/comments")
+        .set("Authorization", `Bearer ${token}`)
+        .send({ post: "6368fe9ce371a6c75fae3b6e", body: "body" })
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property("message");
+          res.body.should.have.property("errors");
+          res.body.errors.should.to.be.a("array");
+          done();
+        });
+    });
     it("should return data", (done) => {
-      const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vaDBAZ21haWwuY29tIiwiX2lkIjoiNjM2OTA1ZTI3NjRhYWM1OWYwNTEyZjIxIiwiaWF0IjoxNjY3ODI3MzE0LCJleHAiOjE2Njc5MTM3MTR9.EJSJ8x0Z9ClOBKBTCKribADwAghl25SeZFT178NIfEk`;
-
       chai
         .request(app)
         .post("/comments")

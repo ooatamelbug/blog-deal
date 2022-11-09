@@ -10,15 +10,15 @@ chai.should();
 chai.use(chaiHttpRequest);
 
 describe("test posts", () => {
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vaDBAZ21haWwuY29tIiwiX2lkIjoiNjM2OTA1ZTI3NjRhYWM1OWYwNTEyZjIxIiwiaWF0IjoxNjY3OTc4NDk3LCJleHAiOjE2NjgwNjQ4OTd9.PSJvZTi0lt92r31488I4ZzHCdBhoIiCN0iIpJ5DjXMc"
   beforeEach((done) => {
     mongoose.connect("mongodb://localhost:27017/blogdeal");
     dotenv.config({ path: "./.env" });
     done();
   });
-  // login page
+  // posts post
   describe("POST /posts", () => {
     it("should return error 401", (done) => {
-      console.log("here 2");
       chai
         .request(app)
         .post("/posts")
@@ -32,8 +32,8 @@ describe("test posts", () => {
           done();
         });
     });
+
     it("should return error 400 validation", (done) => {
-      const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vaEBnbWFpbC5jb20iLCJfaWQiOiI2MzY4YmM3ZDU0NGNiOGM2N2ZmOTUzOGEiLCJpYXQiOjE2Njc4MDgzODIsImV4cCI6MTY2Nzg5NDc4Mn0.-2U50A6Qlr3mMT1mGSTngm4InFvNS7dwJmOx1RyaIUE`;
       chai
         .request(app)
         .post("/posts")
@@ -48,8 +48,6 @@ describe("test posts", () => {
         });
     });
     it("should return data", (done) => {
-      const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vaEBnbWFpbC5jb20iLCJfaWQiOiI2MzY4YmM3ZDU0NGNiOGM2N2ZmOTUzOGEiLCJpYXQiOjE2Njc4MDgzODIsImV4cCI6MTY2Nzg5NDc4Mn0.-2U50A6Qlr3mMT1mGSTngm4InFvNS7dwJmOx1RyaIUE`;
-
       chai
         .request(app)
         .post("/posts")
@@ -63,4 +61,53 @@ describe("test posts", () => {
         });
     });
   });
+
+  // get post
+  describe("GET /posts", () => {
+    it("should return error 401", (done) => {
+      chai
+        .request(app)
+        .get("/posts/?page=1")
+        .set("Authorization", "")
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property("message");
+          res.body.should.have.property("errors");
+          res.body.errors[0].should.to.be.a("string");
+          done();
+        });
+    });
+
+    it("it get error", (done) => {
+      chai
+        .request(app)
+        .get("/posts/?page=0")
+        .set("Authorization", `Bearer ${token}`)
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property("message");
+          done();
+        })
+    })
+
+    it("it get data", (done) => {
+      chai
+        .request(app)
+        .get("/posts/?page=1")
+        .set("Authorization", `Bearer ${token}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("data");
+          res.body.data.should.have.property("total");
+          res.body.data.should.have.property("page");
+          res.body.data.should.have.property("limit");
+          res.body.data.should.have.property("totalPages");
+          res.body.data.should.have.property("hasNextPage");
+          res.body.data.should.have.property("hasPrevPage");
+          res.body.data.should.have.property("data");
+          res.body.data.data.should.to.be.a("array");
+          done();
+        });
+    })
+  })
 });
