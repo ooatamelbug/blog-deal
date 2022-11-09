@@ -27,7 +27,10 @@ class InteractionService {
     let response: Response = {};
     try {
       if (inputDTO.post) {
-        const post = await this.postModel.findOne({ _id: inputDTO.post });
+        const post = await this.postModel.findOne({
+          _id: inputDTO.post,
+          status: "APPROVED",
+        });
         if (!post) {
           statusCode = 404;
           response.message = " error in get post";
@@ -44,7 +47,9 @@ class InteractionService {
           response.data = [interaction];
         }
       } else {
-        const comment = await this.commentModel.findOne({ _id: inputDTO.comment });
+        const comment = await this.commentModel.findOne({
+          _id: inputDTO.comment,
+        });
         if (!comment) {
           statusCode = 404;
           response.message = " error in get comment";

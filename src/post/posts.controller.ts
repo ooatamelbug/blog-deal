@@ -1,5 +1,5 @@
 import { CustomRequest } from './../shared/request';
-import { PostInputDTO } from "./dto/posts.dto";
+import { PostInputDTO, ShowedPostParamDTO } from "./dto/posts.dto";
 import { validate } from "class-validator";
 import { Request, Response, NextFunction } from "express";
 import PostsService from "./posts.service";
@@ -24,6 +24,25 @@ class PostsController {
       });
     } else {
       const result = await this.postsService.createPost(newpostdto);
+      return res.status(result?.statusCode as number).json(result.response);
+    }
+  }
+  
+  public async getPosts(req: CustomRequest, res: Response, next: NextFunction) {
+    // validation error
+    let param = new ShowedPostParamDTO();
+    param.pagenate = Number(req.query?.page);
+    param.order = <string>req.query?.order;
+    param.limit = Number(req.query?.limit);
+    param.role = req.role;
+    const errors = await validate(param);
+    if (errors.length) {
+      return res.status(400).json({
+        message: "error in validation",
+        errors: errors,
+      });
+    } else {
+      const result = await this.postsService.getPosts(param);
       return res.status(result?.statusCode as number).json(result.response);
     }
   }

@@ -15,6 +15,11 @@ class PostsRoutes {
     this.router.post("/", Auth, (req, res, next) =>
       this.postsController.createPost(req, res, next)
     );
+
+    this.router.get("/", Auth, (req, res, next) =>
+      this.postsController.getPosts(req, res, next)
+    );
+
     return this.router;
   }
 }

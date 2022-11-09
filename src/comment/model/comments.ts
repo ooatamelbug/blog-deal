@@ -21,7 +21,7 @@ const CommentSchema: Schema = new mongoose.Schema<ICommentModel>({
     required: true,
     ref: "users",
   },
-});
+}, { timestamps: true });
 
 const Comment: Model<ICommentModel> = mongoose.model<ICommentModel>("comments", CommentSchema);
 

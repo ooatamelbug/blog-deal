@@ -8,4 +8,5 @@ export interface CustomRequestJwtPayload extends JwtPayload {
 
 export interface CustomRequest extends Request {
   user?: any;
+  role?: string;
 }

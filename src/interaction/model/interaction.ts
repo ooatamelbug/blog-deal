@@ -26,7 +26,7 @@ const InteractionSchema: Schema = new mongoose.Schema<IInteractionModel>({
     required: true,
     ref: "users",
   },
-});
+},  { timestamps: true });
 
 const Interaction: Model<IInteractionModel> = mongoose.model<IInteractionModel>("interactions", InteractionSchema);
 

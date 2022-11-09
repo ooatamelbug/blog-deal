@@ -10,3 +10,10 @@ export class PostInputDTO {
   createdby: string;
 }
 
+
+export class ShowedPostParamDTO {
+  role?: string;
+  pagenate: number;
+  limit: number;
+  order: string;
+}
