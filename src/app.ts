@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: "*",
-    allowedHeaders: ["Origin", "X-Request-With", "Content-Type"],
+    allowedHeaders: ["Origin", "X-Request-With", "Content-Type", "Authorization"],
     methods: ["POST", "PATCH", "GET", "OPTIONS"],
     preflightContinue: false,
     maxAge: 60 * 60 * 24 * 365,
