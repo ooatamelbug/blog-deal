@@ -1,4 +1,6 @@
-import { Router } from "express";
+import { CustomRequest } from "./../shared/request";
+import { IsAdmin } from "./../middleware/admin";
+import { Response, Router, NextFunction } from "express";
 import { Auth } from "../middleware/auth";
 import PostsController from "./posts.controller";
 
@@ -18,6 +20,13 @@ class PostsRoutes {
 
     this.router.get("/", Auth, (req, res, next) =>
       this.postsController.getPosts(req, res, next)
+    );
+
+    this.router.patch(
+      "/:id",
+      [Auth, IsAdmin],
+      (req: CustomRequest, res: Response, next: NextFunction) =>
+        this.postsController.changePostsStatus(req, res, next)
     );
 
     return this.router;

@@ -19,8 +19,8 @@ class CommentsService {
     let statusCode: number = 200;
     let response: Response = {};
     try {
-      const post = await this.postModel.findOne({ _id: inputDTO.post });
-      console.log(post);
+      // console.log(inputDTO);
+      const post = await this.postModel.findOne({ _id: inputDTO.post, status: "APPROVED" });
       if (!post) {
         statusCode = 404;
         response.message = " error in get post";

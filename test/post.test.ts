@@ -10,12 +10,35 @@ chai.should();
 chai.use(chaiHttpRequest);
 
 describe("test posts", () => {
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vaDBAZ21haWwuY29tIiwiX2lkIjoiNjM2OTA1ZTI3NjRhYWM1OWYwNTEyZjIxIiwiaWF0IjoxNjY3OTc4NDk3LCJleHAiOjE2NjgwNjQ4OTd9.PSJvZTi0lt92r31488I4ZzHCdBhoIiCN0iIpJ5DjXMc"
+  let token = "";
+  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vc0BnbWFpbC5jb20iLCJfaWQiOiI2MzZjYmVmYWRhZDI0ZWFhOTM0ODc2MjEiLCJpYXQiOjE2NjgwNzExNjMsImV4cCI6MTY2ODE1NzU2M30.n3ptmeiLrNPJCZIHpWDF3uRKHmPgCoICiI_4YKeaFHA";
+  
+  let adminToken = "";
+  adminToken= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGRlYWwuY29tIiwiX2lkIjoiNjM2YmYxMmNhYTUwYTU4MjUwZTcxZTVjIiwiaWF0IjoxNjY4MDcxOTI2LCJleHAiOjE2NjgxNTgzMjZ9.z-773djFET17JniMEsTMOsb8HwxxUvQHLkz5ptJUYGk";
+
   beforeEach((done) => {
     mongoose.connect("mongodb://localhost:27017/blogdeal");
     dotenv.config({ path: "./.env" });
-    done();
+    chai
+      .request(app)
+      .post("/users/login")
+      .set({ username: "mod@gmail.com", password: "moh123" })
+      .end((err, res) => {
+        // token = res.body.token;
+      });
+     done();
   });
+  before((done) => {
+    chai
+      .request(app)
+      .post("/users/login")
+      .set({ username: "admin@deal.com", password: "deal123" })
+      .end((err, res) => {
+        // adminToken = res.body.token;
+        // console.log(adminToken);
+        done();
+      });
+  })
   // posts post
   describe("POST /posts", () => {
     it("should return error 401", (done) => {
@@ -78,7 +101,7 @@ describe("test posts", () => {
         });
     });
 
-    it("it get error", (done) => {
+    it("it get error page out", (done) => {
       chai
         .request(app)
         .get("/posts/?page=0")
@@ -87,8 +110,8 @@ describe("test posts", () => {
           res.should.have.status(404);
           res.body.should.have.property("message");
           done();
-        })
-    })
+        });
+    });
 
     it("it get data", (done) => {
       chai
@@ -108,6 +131,93 @@ describe("test posts", () => {
           res.body.data.data.should.to.be.a("array");
           done();
         });
-    })
-  })
+    });
+  });
+
+  describe("PATCH /posts/:id", () => {
+    it("should return error 401", (done) => {
+      chai
+        .request(app)
+        .patch("/posts/6369108fc9d5bd7ddcb9c830")
+        .set("Authorization", "")
+        .send({ status: ""})
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property("message");
+          res.body.should.have.property("errors");
+          res.body.errors[0].should.to.be.a("string");
+          done();
+        });
+    });
+
+    it("should return error 401 not admin", (done) => {
+      chai
+        .request(app)
+        .patch("/posts/6368fe67e371a6c75fae3b6a")
+        .set("Authorization", `Bearer ${token}`)
+        .send({ status: "" })
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property("message");
+          res.body.should.have.property("errors");
+          res.body.errors.should.to.be.a("array");
+          done();
+        });
+    });
+
+    it("should return error 400 validation", (done) => {
+      chai
+        .request(app)
+        .patch("/posts/6368fe67e371a6c75fae3b6a")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ status: "" })
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("message");
+          res.body.should.have.property("errors");
+          res.body.errors.should.to.be.a("array");
+          done();
+        });
+    });
+
+    it("should return error 404 not found", (done) => {
+      chai
+        .request(app)
+        .patch("/posts/6368fe67e371a6c75fae3b63")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ status: "APPROVED" })
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property("message");
+          done();
+        });
+    });
+
+    it("should return error in status type", (done) => {
+      chai
+        .request(app)
+        .patch("/posts/636910fa658c824709d288a2")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ status: "APPROV" })
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("message");
+          done();
+        });
+    });
+
+    it("should return update", (done) => {
+      chai
+        .request(app)
+        .patch("/posts/636910fa658c824709d288a2")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ status: "APPROVED" })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("data");
+          res.body.data.should.have.property("updated");
+          done();
+        });
+    });
+  });
 });

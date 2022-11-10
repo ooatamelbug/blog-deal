@@ -27,7 +27,9 @@ describe("test admin", () => {
         .send({ username: "admin@deal.com", password: "deal123" })
         .end((err, res) => {
           token = res.body.token;
-          res.should.have.status(201);
+          if(res.status != 200 && res.status != 201) {
+            throw Error("code error"+ res.status);
+          }
           res.body.should.have.property("token");
           done();
         });

@@ -1,5 +1,5 @@
 import { CustomRequest } from './../shared/request';
-import { PostInputDTO, ShowedPostParamDTO } from "./dto/posts.dto";
+import { PostInputDTO, ShowedPostParamDTO, StatusPostDTO } from "./dto/posts.dto";
 import { validate } from "class-validator";
 import { Request, Response, NextFunction } from "express";
 import PostsService from "./posts.service";
@@ -43,6 +43,23 @@ class PostsController {
       });
     } else {
       const result = await this.postsService.getPosts(param);
+      return res.status(result?.statusCode as number).json(result.response);
+    }
+  }
+
+  public async changePostsStatus(req: CustomRequest, res: Response, next: NextFunction) {
+    // validation error
+    let status = new StatusPostDTO();
+    status.id = (req.params?.id);
+    status.status = <string>req.body?.status;
+    const errors = await validate(status);
+    if (errors.length) {
+      return res.status(400).json({
+        message: "error in validation",
+        errors: errors,
+      });
+    } else {
+      const result = await this.postsService.changePostsStatus(status);
       return res.status(result?.statusCode as number).json(result.response);
     }
   }

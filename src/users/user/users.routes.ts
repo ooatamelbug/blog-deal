@@ -11,6 +11,12 @@ class UsersRoutes {
 
   getRouter() {
     // login router
+    /**
+     * @swagger
+     * /users/login:
+     *  post:
+     *    summary: retrun token
+     */
     this.router.post("/login", (req, res, next) =>
       this.usersController.login(req, res, next)
     );

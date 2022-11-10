@@ -1,5 +1,5 @@
 import { Response, ReturnValue } from "./../shared/response";
-import { PostInputDTO, ShowedPostParamDTO } from "./dto/posts.dto";
+import { PostInputDTO, ShowedPostParamDTO, StatusPostDTO } from "./dto/posts.dto";
 import Post, { IPostModel } from "./model/posts";
 import { Model } from "mongoose";
 
@@ -124,6 +124,25 @@ class PostsService {
       ]);
       response.data = { type: "posts", TYPE: postCount };
     } catch (error) {
+      statusCode = 500;
+      response.message = error.message;
+    }
+    return { statusCode, response };
+  }
+
+  public async changePostsStatus(post: StatusPostDTO): Promise<ReturnValue> {
+    let statusCode: number = 200;
+    let response: Response = {};
+    try {
+      const postData = await this.postModel.findOne({_id: post.id});
+      if(!postData) {
+        statusCode = 404;
+        response.message = "not found"
+      } else {
+        await this.postModel.findOneAndUpdate({ _id: postData._id }, { status: post.status });
+        response.data = { updated: true } 
+      }
+    }  catch (error) {
       statusCode = 500;
       response.message = error.message;
     }
